@@ -89,7 +89,7 @@ export default class AdminController {
      // return 'aaaa';
      
   }
-  static signInOptions(req, res){
+  static options(req, res){
       
     console.log('got here');
     if (req.method === 'OPTIONS') {
