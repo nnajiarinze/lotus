@@ -15,6 +15,12 @@ module.exports = function (req, res, next) {
       if (err) {
         return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
       }else{
+
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers',
+          'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+        );
         return next();
       }
     });
