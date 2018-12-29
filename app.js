@@ -6,7 +6,7 @@ import router from './routes';
 var app = express();
 app.use(parser.json());
 //app.use(authMiddleware);
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
 console.log('listening');
 
 app.use('/api/v1', router);
