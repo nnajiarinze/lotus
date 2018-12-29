@@ -89,24 +89,31 @@ export default class AdminController {
      // return 'aaaa';
      
   }
+  static signInOptions(req, res){
+      
+    console.log('got here');
+    if (req.method === 'OPTIONS') {
+     console.log('!OPTIONS');
+     var headers = {};
+     // IE8 does not allow domains to be specified, just the *
+     // headers["Access-Control-Allow-Origin"] = req.headers.origin;
+     headers["Access-Control-Allow-Origin"] = "*";
+     headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
+     headers["Access-Control-Allow-Credentials"] = false;
+     headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+     headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
+     res.writeHead(200, headers);
+     res.end();
+ }
 
+
+  }
+
+  
     static signIn(req, res){
       
-       console.log('got here');
-       if (req.method === 'OPTIONS') {
-        console.log('!OPTIONS');
-        var headers = {};
-        // IE8 does not allow domains to be specified, just the *
-        // headers["Access-Control-Allow-Origin"] = req.headers.origin;
-        headers["Access-Control-Allow-Origin"] = "*";
-        headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
-        headers["Access-Control-Allow-Credentials"] = false;
-        headers["Access-Control-Max-Age"] = '86400'; // 24 hours
-        headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
-        res.writeHead(200, headers);
-        res.end();
-    }
-    
+      
+
       let {username,password } = req.body;
       var query = 'select * from administrator WHERE username="'+username+'"';
       var admin={};
