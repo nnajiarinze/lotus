@@ -1,20 +1,11 @@
 import express from 'express';
+import parser from 'body-parser';
 import router from './routes';
-
-// import mysql from './database/mysqlLib'; 
-
-// mysql.getConnection(function (err, connection) {
-//      connection.query("SELECT * FROM administrator WHERE username='arinze.nnaji'", function (err, result) {
-//         if (err) throw err;
-       
-//         console.log(result);
-//     });
-//     });
-
-
+//import authMiddleware from './controllers/Auth';
 
 var app = express();
-
+app.use(parser.json());
+//app.use(authMiddleware);
 app.listen(3000);
 console.log('listening');
 
