@@ -109,8 +109,10 @@ export default class AdminController {
             var passwordHash = md5(password+admin.salt);
              if(passwordHash == admin.passwordHash){
                console.log("login succes");
-              res.json({token: token,
-                response: "successful"
+               res.status(200).json({token: token,
+                success: true,
+                username: admin.username
+
                       });
             }else{
               res.json({
