@@ -2,6 +2,7 @@ import { Router } from 'express';
 import authMiddleware from '../controllers/Auth';
 import AdminController from '../controllers/Admin';
 import MemberController from '../controllers/Member';
+import cors from 'cors';
 
 const router = new Router();
 
