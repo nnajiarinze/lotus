@@ -1,5 +1,6 @@
 import express from 'express';
 import parser from 'body-parser';
+import cors from 'cors';
 import router from './routes';
 //import authMiddleware from './controllers/Auth';
 var port = process.env.PORT || 3000;
@@ -8,9 +9,6 @@ app.use(parser.json());
 //app.use(authMiddleware);
 app.listen(port);
 console.log('listening '+port);
-
-// All OPTIONS requests return a simple status: 'OK'
  
-
 
 app.use('/api/v1', router);
