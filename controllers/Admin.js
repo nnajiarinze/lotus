@@ -121,27 +121,35 @@ export default class AdminController {
            
     mysql.getConnection(function (err, connection,) {
         connection.query(query, function (err, result) {
-          result.forEach( (admin) => {
 
-            // create a token
-          var token = jwt.sign({ id: admin.id }, config.secret, {
-            expiresIn: 86400 // expires in 24 hours
+          if(err){
+            res.json({
+              response: 'An error occured.'
           });
-          
-            var passwordHash = md5(password+admin.salt);
-             if(passwordHash == admin.passwordHash){
-               console.log("login succes");
-               res.status(200).json({token: token,
-                success: true,
-                username: admin.username
+          }else{
+            result.forEach( (admin) => {
 
-                      });
-            }else{
-              res.json({
-                response:'failed'
-              })
-            }         
-        });
+              // create a token
+            var token = jwt.sign({ id: admin.id }, config.secret, {
+              expiresIn: 86400 // expires in 24 hours
+            });
+            
+              var passwordHash = md5(password+admin.salt);
+               if(passwordHash == admin.passwordHash){
+                 console.log("login succes");
+                 res.status(200).json({token: token,
+                  success: true,
+                  username: admin.username
+  
+                        });
+              }else{
+                res.json({
+                  response:'failed'
+                })
+              }         
+          });
+          }
+        
        });
     });
 

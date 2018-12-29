@@ -29,13 +29,16 @@ export default class MemberController {
                                 res.json({
                                     response: 'An error occured. Member creation failed'
                                 });
+                               
+                            }else{
+                                res.json({
+                                    response: 'Member successfully created',
+                                    id: result.insertId
+                                });
                             }
+                            
 
-
-                            res.json({
-                                response: 'Member successfully created',
-                                id: result.insertId
-                            });
+                           
 
                         });
                     });
@@ -63,13 +66,11 @@ export default class MemberController {
                         res.json({
                             response: 'An error occured. Failed to fetch member'
                         });
+                    }else{
+                        res.json({
+                            response: result
+                        });
                     }
-
-                   
-                    res.json({
-                        response: result
-                    });
-
                 });
             });
             
@@ -98,13 +99,15 @@ export default class MemberController {
                         res.json({
                             response: 'An error occured. Member creation failed'
                         });
-                    }
+                    }else{
+                        
 
                     console.log(result);
                     res.json({
                         response: 'Member successfully Updated',
                        
                     });
+                }
 
                 });
             });
