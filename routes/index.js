@@ -5,6 +5,8 @@ import MemberController from '../controllers/Member';
 
 const router = new Router();
 
+
+
 router.get('/admin',authMiddleware, AdminController.index);
 router.post('/admin/',authMiddleware, AdminController.create);
 router.post('/admin/signIn', AdminController.signIn);

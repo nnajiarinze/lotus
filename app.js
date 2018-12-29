@@ -10,10 +10,7 @@ app.listen(port);
 console.log('listening '+port);
 
 // All OPTIONS requests return a simple status: 'OK'
-app.options('*', (req, res) => {
-    res.json({
-      status: 'OK'
-    });
-  });
-  
+ 
+
+
 app.use('/api/v1', router);
