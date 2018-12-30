@@ -7,7 +7,7 @@ import cors from 'cors';
 const router = new Router();
 
 
-//router.options('*',AdminController.options);
+router.options('*',AdminController.options);
 router.get('/admin',authMiddleware, AdminController.index);
 router.post('/admin/',authMiddleware, AdminController.create);
 router.post('/admin/signIn',cors(), AdminController.signIn);
