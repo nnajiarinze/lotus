@@ -3,7 +3,7 @@ import parser from 'body-parser';
 
 import router from './routes';
 //import authMiddleware from './controllers/Auth';
-var port = process.env.PORT || 3001;
+var port = process.env.PORT || 3000;
 var app = express();
 app.use(parser.json());
 //app.use(authMiddleware);

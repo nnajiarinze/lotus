@@ -29,21 +29,21 @@ export default class MemberController {
                                 res.json({
                                     response: 'An error occured. Member creation failed'
                                 });
-                               
-                            }else{
+
+                            } else {
                                 res.json({
                                     response: 'Member successfully created',
                                     id: result.insertId
                                 });
                             }
-                            
 
-                           
+
+
 
                         });
                     });
 
-                   
+
                 });
 
 
@@ -53,34 +53,102 @@ export default class MemberController {
 
     }
 
-    static fetchById(req, res){
-        let  id  = req.query.id;
 
-        if(id){
-            var query = 'SELECT * FROM members WHERE id='+id;
-            
+    static createMedicals(req, res) {
+
+        let { memberId, emergencyContactName, relationship, email, phone, additionalPhoneNumber, address, additionalDetails } = req.body;
+
+        if (!memberId || !emergencyContactName || !relationship || !phone) {
+            res.json({
+                error: 'MemberId, EmergencyContactName, Relationship, and Phone are required parameters'
+            });
+        } else {
+
+            var query = 'INSERT INTO members_medicals (memberId, emergencyContactName, relationship, email, phone, additionalPhoneNumber, address, additionalDetails) VALUES (' + memberId + ', "' + emergencyContactName + '", "' + relationship + '", "' + email + '", "' + phone + '", "' + additionalPhoneNumber + '","' + address + '", "' + additionalDetails + '")';
+            console.log(query);
             mysql.getConnection(function (err, connection) {
                 connection.query(query, function (err, result) {
                     if (err) {
+                        console.log(err);
+                        res.json({ 
+                            response: 'An error occured '+err.sqlMessage
+                        });
+                    } else {
+                        console.log(result);
+                        res.json({
+                            response: 'success',
+                            id: result.insertId
+
+                        });
+                    }
+
+                });
+            });
+
+        }
+    }
+
+    static updateMedicals(req, res) {
+        let { memberId, emergencyContactName, relationship, email, phone, additionalPhoneNumber, address, additionalDetails } = req.body;
+
+        if (!memberId || !emergencyContactName || !relationship || !phone) {
+            res.json({
+                error: 'MemberId, EmergencyContactName, Relationship, and Phone are required parameters'
+            });
+        } else {
+            var query = 'UPDATE members_medicals SET emergencyContactName="'+emergencyContactName+'", relationship="'+relationship+'", email="'+email+'", phone="'+phone+'", additionalPhoneNumber="'+additionalPhoneNumber+'", address="'+address+'", additionalDetails="'+additionalDetails+'" WHERE memberId='+memberId+' ';
+        
+            mysql.getConnection(function (err, connection) {
+                connection.query(query, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                            response: 'An error occured'
+                        });
+                    } else {
                        
+                        res.json({
+                            response: 'success'
+
+                        });
+                    }
+
+                });
+            });
+
+        }
+
+    }
+
+
+    static fetchById(req, res) {
+        let id = req.query.id;
+
+        if (id) {
+            var query = 'SELECT * FROM members WHERE id=' + id;
+
+            mysql.getConnection(function (err, connection) {
+                connection.query(query, function (err, result) {
+                    if (err) {
+
                         res.json({
                             response: 'An error occured. Failed to fetch member'
                         });
-                    }else{
+                    } else {
                         res.json({
                             response: result
                         });
                     }
                 });
             });
-            
-        }else{
+
+        } else {
             res.json({
                 error: 'id parameter required'
             });
         }
 
-    }
+    }               
 
 
     static update(req, res) {
@@ -88,43 +156,116 @@ export default class MemberController {
         let { id, username, firstName, lastName, dateOfBirth, gender, tagNumber, email, phone, additionalPhoneNumber, address, city } = req.body;
 
         admin.getUserName(req.headers['x-access-token'])
-        .then(function (adminUsername) {
-         
-            var query = 'UPDATE members SET username="'+username+'" , firstName="'+firstName+'", lastName="'+lastName+'", dateOfBirth="'+dateOfBirth+'", gender="'+gender+'",tagNumber="'+tagNumber+'", email="'+email+'", phone="'+phone+'",additionalPhoneNumber="'+additionalPhoneNumber+'", address="'+address+'", city="'+city+'" WHERE id='+id+' ';
-          
+            .then(function (adminUsername) {
+
+                var query = 'UPDATE members SET username="' + username + '" , firstName="' + firstName + '", lastName="' + lastName + '", dateOfBirth="' + dateOfBirth + '", gender="' + gender + '",tagNumber="' + tagNumber + '", email="' + email + '", phone="' + phone + '",additionalPhoneNumber="' + additionalPhoneNumber + '", address="' + address + '", city="' + city + '" WHERE id=' + id + ' ';
+
+                mysql.getConnection(function (err, connection) {
+                    connection.query(query, function (err, result) {
+                        if (err) {
+                            console.log(err);
+                            res.json({
+                                response: 'An error occured. Member creation failed'
+                            });
+                        } else {
+
+
+                            console.log(result);
+                            res.json({
+                                response: 'Member successfully Updated',
+
+                            });
+                        }
+
+                    });
+                });
+
+
+
+            });
+
+
+    }
+
+
+    static fetchPaginated(req, res) {
+        let pageNum = req.query.pageNum;
+        let pageSize = req.query.pageSize;
+
+        if (isNaN(pageNum) || isNaN(pageSize)) {
+            res.json({
+                error: 'pageNum and pageSize should be numeric'
+            });
+        } else {
+
+
+            if (pageNum < 1) {
+                pageNum = 1;
+            }
+            if (pageSize < 1) {
+                pageSize = 2;
+            }
+            var offset = (pageNum - 1) * pageSize;
+
+            var query = 'SELECT * FROM members LIMIT ' + offset + ',' + pageSize;
+
             mysql.getConnection(function (err, connection) {
                 connection.query(query, function (err, result) {
                     if (err) {
                         console.log(err);
                         res.json({
-                            response: 'An error occured. Member creation failed'
+                            response: 'An error occured'
                         });
-                    }else{
-                        
+                    } else {
+                        res.json({
+                            response: result,
 
-                    console.log(result);
-                    res.json({
-                        response: 'Member successfully Updated',
-                       
-                    });
-                }
+                        });
+                    }
 
                 });
             });
-          
-          
-           
-        });
 
-       
+        }
+
     }
 
+    static validateUsername(req, res) {
+        let { username } = req.body;
+        if (username) {
+            var query = 'SELECT * FROM members WHERE username= "' + username + '"  ';
+
+            mysql.getConnection(function (err, connection) {
+                connection.query(query, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                        res.json({
+                            response: 'An error occured.'
+                        });
+                    } else {
+                        if (result.length > 0) {
+                            res.json({
+                                status: false
+                            });
+                        } else {
+                            res.json({
+                                status: true,
+                            });
+                        }
 
 
-    static fetchPaginated(req, res){
-        let  pageNum  = req.query.pageNum;
-        let  pageSize = req.query.pageSize;
+                    }
 
+                });
+            });
+
+
+
+        } else {
+            res.json({
+                error: 'Username is required'
+            });
+        }
     }
 
 }
