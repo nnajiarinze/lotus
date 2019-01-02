@@ -76,7 +76,7 @@ export default class AdminController {
 
 
   static getUserName(token) {
-
+    console.log(token);
     token = token.replace('Bearer', '');
     token = token.trim();
 
