@@ -15,7 +15,7 @@ router.post('/admin/signIn',cors(), AdminController.signIn);
 
 
 
-router.post('/member/',cors(),MemberController.create);
+router.post('/member/',cors(),authMiddleware,MemberController.create);
 router.post('/member/validateUsername',cors(),authMiddleware,MemberController.validateUsername);
 router.post('/member/medicals',cors(),authMiddleware,MemberController.createMedicals);
 router.get('/member',cors(),authMiddleware,MemberController.fetchById);
