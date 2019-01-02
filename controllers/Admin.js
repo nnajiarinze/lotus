@@ -109,7 +109,7 @@ export default class AdminController {
       headers["Access-Control-Allow-Credentials"] =true;
       headers["Access-Control-Max-Age"] = '86400'; // 24 hours
       headers["Access-Control-Expose-Headers"] ='Content-Length';
-      headers["Access-Control-Allow-Headers"] = "Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers";
+      headers["Access-Control-Allow-Headers"] = 'Access-Control-Allow-Headers, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers';
       res.writeHead(200, headers);
       res.end();
     }
