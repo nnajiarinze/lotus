@@ -4,7 +4,7 @@ import config from '../config/config';
 
 
 module.exports = function (req, res, next) {
-
+ console.log(req);
     var token = req.headers['x-access-token'];
         
     if(!token){
