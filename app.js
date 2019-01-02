@@ -9,6 +9,10 @@ app.use(parser.json());
 app.use(cors({
     exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
   }));
+
+  app.use(cors({
+    credentials: true,
+  }));
 //app.use(authMiddleware);
 app.listen(port);
 console.log('listening '+port);
