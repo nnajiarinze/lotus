@@ -17,7 +17,7 @@ export default class MemberController {
             });
         } else {
             var dateCreated = new Date().toLocaleString();
-            admin.getUserName(req.headers['x-access-token'])
+            admin.getUserName(req.headers['Authorization'])
                 .then(function (adminUsername) {
 
                     var query = 'INSERT INTO members (username, firstName, lastName, dateOfBirth, gender, tagNumber, email, phone, additionalPhoneNumber,address,city,dateCreated,createdBy,image)' +

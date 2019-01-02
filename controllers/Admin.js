@@ -77,6 +77,9 @@ export default class AdminController {
 
   static getUserName(token) {
 
+    token = token.replace('Bearer', '');
+    token = token.trim();
+
     return new Promise(function (resolve, reject) {
       jwt.verify(token, config.secret, function (err, decoded) {
         if (err) {
