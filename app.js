@@ -6,10 +6,7 @@ import router from './routes';
 var port = process.env.PORT || 3000;
 var app = express();
 app.use(parser.json());
-app.use(cors({
-    exposedHeaders: ['Content-Length', 'X-Foo', 'X-Bar'],
-  }));
-
+ 
   app.use(cors({
     credentials: true,
   }));
