@@ -98,6 +98,7 @@ export default class AdminController {
   static options(req, res) {
 
     console.log('got here');
+    console.log(req);
     if (req.method === 'OPTIONS') {
       console.log('!OPTIONS');
       var headers = {};
