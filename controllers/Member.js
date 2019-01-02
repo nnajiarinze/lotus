@@ -9,7 +9,7 @@ export default class MemberController {
 
     static create(req, res) {
 
-        let { username, firstName, lastName, dateOfBirth, gender, tagNumber, email, phone, additionalPhoneNumber, address, city } = req.body;
+        let { username, firstName, lastName, dateOfBirth, gender, tagNumber, email, phone, additionalPhoneNumber, address, city,image } = req.body;
 
         if (!username || !firstName || !lastName || !dateOfBirth || !gender || !email || !phone || !city || !Date.parse(dateOfBirth)) {
             res.json({
@@ -20,8 +20,8 @@ export default class MemberController {
             admin.getUserName(req.headers['x-access-token'])
                 .then(function (adminUsername) {
 
-                    var query = 'INSERT INTO members (username, firstName, lastName, dateOfBirth, gender, tagNumber, email, phone, additionalPhoneNumber,address,city,dateCreated,createdBy)' +
-                        ' VALUES ("' + username + '","' + firstName + '","' + lastName + '","' + dateOfBirth + '","' + gender + '","' + tagNumber + '","' + email + '","' + phone + '","' + additionalPhoneNumber + '","' + address + '","' + city + '","' + dateCreated + '","' + adminUsername + '") ';
+                    var query = 'INSERT INTO members (username, firstName, lastName, dateOfBirth, gender, tagNumber, email, phone, additionalPhoneNumber,address,city,dateCreated,createdBy,image)' +
+                        ' VALUES ("' + username + '","' + firstName + '","' + lastName + '","' + dateOfBirth + '","' + gender + '","' + tagNumber + '","' + email + '","' + phone + '","' + additionalPhoneNumber + '","' + address + '","' + city + '","' + dateCreated + '","' + adminUsername + '","'+image+'") ';
 
                     mysql.getConnection(function (err, connection) {
                         connection.query(query, function (err, result) {
@@ -132,7 +132,7 @@ export default class MemberController {
                     if (err) {
 
                         res.json({
-                            response: 'An error occured. Failed to fetch member'
+                            response: 'An error occured '+err.sqlMessage
                         });
                     } else {
                         res.json({
@@ -165,7 +165,7 @@ export default class MemberController {
                         if (err) {
                             console.log(err);
                             res.json({
-                                response: 'An error occured. Member creation failed'
+                                response: 'An error occured '+err.sqlMessage
                             });
                         } else {
 
@@ -214,7 +214,7 @@ export default class MemberController {
                     if (err) {
                         console.log(err);
                         res.json({
-                            response: 'An error occured'
+                            response: 'An error occured '+err.sqlMessage
                         });
                     } else {
                         res.json({

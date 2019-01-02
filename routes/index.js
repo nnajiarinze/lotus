@@ -3,24 +3,28 @@ import authMiddleware from '../controllers/Auth';
 import AdminController from '../controllers/Admin';
 import MemberController from '../controllers/Member';
 import cors from 'cors';
+import SubscriptionController from '../controllers/Subscription';
 
 const router = new Router();
 
 
 router.options('*',AdminController.options);
-router.get('/admin',authMiddleware, AdminController.index);
-router.post('/admin/',authMiddleware, AdminController.create);
+router.get('/admin',cors(),authMiddleware, AdminController.index);
+router.post('/admin/',cors(),authMiddleware, AdminController.create);
 router.post('/admin/signIn',cors(), AdminController.signIn);
 
 
 
-router.post('/member/',authMiddleware,MemberController.create);
-router.post('/member/validateUsername',authMiddleware,MemberController.validateUsername);
-router.post('/member/medicals',authMiddleware,MemberController.createMedicals);
-router.get('/member',authMiddleware,MemberController.fetchById);
-router.get('/member/list',authMiddleware, MemberController.fetchPaginated);
-router.put('/member',authMiddleware,MemberController.update);
-router.put('/member/medicals',authMiddleware,MemberController.updateMedicals);
+router.post('/member/',cors(),authMiddleware,MemberController.create);
+router.post('/member/validateUsername',cors(),authMiddleware,MemberController.validateUsername);
+router.post('/member/medicals',cors(),authMiddleware,MemberController.createMedicals);
+router.get('/member',cors(),authMiddleware,MemberController.fetchById);
+router.get('/member/list',cors(),authMiddleware, MemberController.fetchPaginated);
+router.put('/member',cors(),authMiddleware,MemberController.update);
+router.put('/member/medicals',cors(),authMiddleware,MemberController.updateMedicals);
 
+
+router.post('/subscription',cors(),authMiddleware,SubscriptionController.create);
+router.put('/subscription',cors(),authMiddleware,SubscriptionController.update);
 
 export default router;
