@@ -108,6 +108,7 @@ export default class AdminController {
       headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, OPTIONS";
       headers["Access-Control-Allow-Credentials"] = false;
       headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+      headers["Access-Control-Expose-Headers"] ='Content-Length';
       headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
       res.writeHead(200, headers);
       res.end();
