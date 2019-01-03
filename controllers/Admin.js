@@ -76,7 +76,7 @@ export default class AdminController {
 
 
   static getUserName(token) {
-    console.log(token);
+  
     token = token.replace('Bearer', '');
     token = token.trim();
 
@@ -98,27 +98,27 @@ export default class AdminController {
 
 
 
-  static options(req, res) {
+  // static options(req, res) {
 
-    console.log('got here');
-    console.log(req);
-    if (req.method === 'OPTIONS') {
-      console.log('!OPTIONS');
-      var headers = {};
-      // IE8 does not allow domains to be specified, just the *
-      // headers["Access-Control-Allow-Origin"] = req.headers.origin;
-      //headers["Access-Control-Allow-Origin"] = "*";
-      headers["Access-Control-Allow-Methods"] = "POST, HEAD, GET, PUT, DELETE, OPTIONS";
-      //headers["Access-Control-Allow-Credentials"] =false;
-      headers["Access-Control-Max-Age"] = '86400'; // 24 hours
-      headers["Access-Control-Expose-Headers"] ='Content-Length';
-      headers["Access-Control-Allow-Headers"] = 'Access-Control-Allow-Headers, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers';
-      res.writeHead(200, headers);
-      res.end();
-    }
+  //   console.log('got here');
+  //   console.log(req);
+  //   if (req.method === 'OPTIONS') {
+  //     console.log('!OPTIONS');
+  //     var headers = {};
+  //     // IE8 does not allow domains to be specified, just the *
+  //     // headers["Access-Control-Allow-Origin"] = req.headers.origin;
+  //     //headers["Access-Control-Allow-Origin"] = "*";
+  //     headers["Access-Control-Allow-Methods"] = "POST, HEAD, GET, PUT, DELETE, OPTIONS";
+  //     //headers["Access-Control-Allow-Credentials"] =false;
+  //     headers["Access-Control-Max-Age"] = '86400'; // 24 hours
+  //     headers["Access-Control-Expose-Headers"] ='Content-Length';
+  //     headers["Access-Control-Allow-Headers"] = 'Access-Control-Allow-Headers, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers';
+  //     res.writeHead(200, headers);
+  //     res.end();
+  //   }
 
 
-  }
+  // }
 
 
   static signIn(req, res) {

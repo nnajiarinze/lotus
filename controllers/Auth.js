@@ -4,16 +4,15 @@ import config from '../config/config';
 
 
 module.exports = function (req, res, next) {
- //console.log(req);
+ 
     var token = req.headers['authorization'];
-  console.log(req.headers);
-        console.log(token);
+ 
     if(!token){
       return res.status(401).send({auth: false, message: 'No token provided' });
     }
     token = token.replace('Bearer', '');
     token = token.trim();
-    console.log(' token is ' +token);
+ 
     jwt.verify(token, config.secret, function(err, decoded) {
       if (err) {
         return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
