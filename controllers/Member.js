@@ -44,8 +44,8 @@ export default class MemberController {
                                             });
                                         } else {
                                             res.json({
-                                                id: 'Member successfully created',
-                                                response: result
+                                                response: 'Member successfully created',
+                                                data: result
                                             });
                                         }
                                     });
@@ -130,7 +130,7 @@ export default class MemberController {
 
                             res.json({
                                 response: 'success',
-                                id: result.insertId
+                                data: result
 
                             });
                         }
