@@ -130,7 +130,7 @@ export default class MemberController {
 
                             res.json({
                                 response: 'success',
-                                data: result
+                                data: result.insertId
 
                             });
                         }
