@@ -23,9 +23,22 @@ export default class SubscriptionController {
                         });
 
                     } else {
-                        res.json({
-                            response: 'Subscription created successfully',
-                            id: result.insertId
+                        query = 'SELECT * FROM subscription WHERE id=' + result.insertId;
+                                
+                        mysql.getConnection(function (err, connection) {
+                            connection.query(query, function (err, result) {
+                                if (err) {
+
+                                    res.json({
+                                        response: 'An error occured ' + err.sqlMessage
+                                    });
+                                } else {
+                                    res.json({
+                                        response: 'Subscription created successfully',
+                                        data: result
+                                    });
+                                }
+                            });
                         });
                     }
                 });
