@@ -257,7 +257,7 @@ export default class MemberController {
 
         let { id, username, firstName, lastName, dateOfBirth, gender, tagNumber, email, phone, additionalPhoneNumber, address, city } = req.body;
 
-        admin.getUserName(req.headers['authorization`'])
+        admin.getUserName(req.headers['authorization'])
             .then(function (adminUsername) {
 
                 var query = 'UPDATE members SET username="' + username + '" , firstName="' + firstName + '", lastName="' + lastName + '", dateOfBirth="' + dateOfBirth + '", gender="' + gender + '",tagNumber="' + tagNumber + '", email="' + email + '", phone="' + phone + '",additionalPhoneNumber="' + additionalPhoneNumber + '", address="' + address + '", city="' + city + '" WHERE id=' + id + ' ';
