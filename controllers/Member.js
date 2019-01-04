@@ -34,7 +34,7 @@ export default class MemberController {
                             } else {
 
                                 query = 'SELECT * FROM members WHERE id=' + result.insertId;
-                                console.log(query);
+                                
                                 mysql.getConnection(function (err, connection) {
                                     connection.query(query, function (err, result) {
                                         if (err) {
@@ -128,11 +128,26 @@ export default class MemberController {
                             });
                         } else {
 
-                            res.json({
-                                response: 'success',
-                                data: result.insertId
 
+                            query = 'SELECT * FROM member_subscriptions WHERE id=' + result.insertId;
+                                
+                            mysql.getConnection(function (err, connection) {
+                                connection.query(query, function (err, result) {
+                                    if (err) {
+
+                                        res.json({
+                                            response: 'An error occured ' + err.sqlMessage
+                                        });
+                                    } else {
+                                        res.json({
+                                            response: 'Member subscription successfully created',
+                                            data: result
+                                        });
+                                    }
+                                });
                             });
+
+                             
                         }
 
                     });
