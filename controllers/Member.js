@@ -34,7 +34,7 @@ export default class MemberController {
                             } else {
 
                                 query = 'SELECT * FROM members WHERE id=' + result.insertId;
-                                
+
                                 mysql.getConnection(function (err, connection) {
                                     connection.query(query, function (err, result) {
                                         if (err) {
@@ -87,10 +87,22 @@ export default class MemberController {
                         });
                     } else {
 
-                        res.json({
-                            response: 'success',
-                            id: result.insertId
+                        query = 'SELECT * FROM members_medicals WHERE id=' + result.insertId;
 
+                        mysql.getConnection(function (err, connection) {
+                            connection.query(query, function (err, result) {
+                                if (err) {
+
+                                    res.json({
+                                        response: 'An error occured ' + err.sqlMessage
+                                    });
+                                } else {
+                                    res.json({
+                                        response: 'Medicals created successfully',
+                                        data: result
+                                    });
+                                }
+                            });
                         });
                     }
 
@@ -130,7 +142,7 @@ export default class MemberController {
 
 
                             query = 'SELECT * FROM member_subscriptions WHERE id=' + result.insertId;
-                                
+
                             mysql.getConnection(function (err, connection) {
                                 connection.query(query, function (err, result) {
                                     if (err) {
@@ -147,7 +159,7 @@ export default class MemberController {
                                 });
                             });
 
-                             
+
                         }
 
                     });
@@ -168,7 +180,7 @@ export default class MemberController {
         var today = moment().format(dateFormat);
         var totalMembersQuery = 'SELECT COUNT(*) as totalMembers FROM members';
         var activeMembersQuery = 'SELECT COUNT(DISTINCT(memberId)) as activeMembers FROM member_subscriptions WHERE  endDate >= "' + today + '" ';
-        
+
         var activeMembers = 0;
         var totalMembers = 0;
 
@@ -375,8 +387,6 @@ export default class MemberController {
 
                 });
             });
-
-
 
         } else {
             res.json({
