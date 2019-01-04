@@ -23,6 +23,7 @@ router.post('/member/subscription',cors(),authMiddleware,MemberController.create
 router.get('/member',cors(),authMiddleware,MemberController.fetchById);
 router.get('/member/list',cors(),authMiddleware, MemberController.fetchPaginated);
 router.get('/member/stats',cors(),authMiddleware,MemberController.membersStats);
+router.get('/member/active', cors(),authMiddleware, MemberController.fetchPagniatedActiveMembers);
 
 router.put('/member',cors(),authMiddleware,MemberController.update);
 router.put('/member/medicals',cors(),authMiddleware,MemberController.updateMedicals);

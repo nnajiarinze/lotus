@@ -217,6 +217,55 @@ export default class MemberController {
         });
     }
 
+    static fetchPagniatedActiveMembers(req, res) {
+
+        let pageNum = req.query.pageNum;
+        let pageSize = req.query.pageSize;
+
+        if (isNaN(pageNum) || isNaN(pageSize)) {
+            res.json({
+                error: 'pageNum and pageSize should be numeric'
+            });
+        } else {
+
+
+            if (pageNum < 1) {
+                pageNum = 1;
+            }
+            if (pageSize < 1) {
+                pageSize = 2;
+            }
+            var offset = (pageNum - 1) * pageSize;
+
+            var dateFormat = 'YYYY-MM-DD';
+            var today = moment().format(dateFormat);
+
+            var query = 'SELECT DISTINCT(memberId) as memberId, lm.*'
+                + ' FROM member_subscriptions'
+                + ' JOIN members AS lm ON memberId = lm.id'
+                + ' WHERE  endDate >= "' + today + '"  LIMIT ' + offset + ',' + pageSize;
+
+            mysql.getConnection(function (err, connection) {
+                connection.query(query, function (err, result) {
+                    if (err) {
+                        res.json({
+                            response: 'An error occured ' + err.sqlMessage
+                        });
+                    } else {
+                        res.json({
+                            response: 'success',
+                            data: result
+                        });
+                    }
+
+                });
+            });
+
+
+        }
+
+    }
+
     static updateMedicals(req, res) {
         let { memberId, emergencyContactName, relationship, email, phone, additionalPhoneNumber, address, additionalDetails } = req.body;
 
