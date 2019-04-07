@@ -4,6 +4,7 @@ import md5 from 'js-md5';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import config from '../config/config';
+import nodemailer from 'nodemailer';
 
 export default class AdminController {
   static index(req, res) {
@@ -76,29 +77,46 @@ export default class AdminController {
 
   }
 
+  static sendNewsLetter(req,res){
 
+    console.log(req.body.html.toString());
+    
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'vip4ever2020@gmail.com',
+    pass: 'P@$$w0rded1'
+  },
+  tls: {
+    rejectUnauthorized: false
+}
+});
 
-  // static options(req, res) {
+var mailOptions = {
+  from: 'vip4ever2020@gmail.com',
+  to: 'arinzennajidaniel@gmail.com',
+  subject: 'Sending Email using Node.js',
+  html:  req.body.html
+};
 
-  //   console.log('got here');
-  //   console.log(req);
-  //   if (req.method === 'OPTIONS') {
-  //     console.log('!OPTIONS');
-  //     var headers = {};
-  //     // IE8 does not allow domains to be specified, just the *
-  //     // headers["Access-Control-Allow-Origin"] = req.headers.origin;
-  //     //headers["Access-Control-Allow-Origin"] = "*";
-  //     headers["Access-Control-Allow-Methods"] = "POST, HEAD, GET, PUT, DELETE, OPTIONS";
-  //     //headers["Access-Control-Allow-Credentials"] =false;
-  //     headers["Access-Control-Max-Age"] = '86400'; // 24 hours
-  //     headers["Access-Control-Expose-Headers"] ='Content-Length';
-  //     headers["Access-Control-Allow-Headers"] = 'Access-Control-Allow-Headers, Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers';
-  //     res.writeHead(200, headers);
-  //     res.end();
-  //   }
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+    res.json({
+      response: 'Failed to send email'
+    });
+  } else {
+    console.log('Email sent: ' + info.response);
+    res.json({
+      response: 'Email Sent successfully'
+    });
+  }
+});
+ 
+   
+  }
 
-
-  // }
+ 
 
 
   static signIn(req, res) {

@@ -12,6 +12,7 @@ const router = new Router();
 router.get('/admin',cors(),authMiddleware, AdminController.index);
 router.post('/admin/',cors(),authMiddleware, AdminController.create);
 router.post('/admin/signIn',cors(), AdminController.signIn);
+router.post('/admin/newsletter/',cors(), AdminController.sendNewsLetter);
 
 
 
@@ -24,6 +25,7 @@ router.get('/member',cors(),authMiddleware,MemberController.fetchById);
 router.get('/member/list',cors(),authMiddleware, MemberController.fetchPaginated);
 router.get('/member/stats',cors(),authMiddleware,MemberController.membersStats);
 router.get('/member/active', cors(),authMiddleware, MemberController.fetchPagniatedActiveMembers);
+router.get('/member/inactive',cors(),authMiddleware,MemberController.fetchPaginatedInactiveMembers);
 
 router.put('/member',cors(),authMiddleware,MemberController.update);
 router.put('/member/medicals',cors(),authMiddleware,MemberController.updateMedicals);

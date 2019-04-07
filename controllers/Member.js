@@ -123,6 +123,7 @@ export default class MemberController {
         } else {
             var dateFormat = 'YYYY-MM-DD';
             startDate = moment(startDate, dateFormat, true);
+            
             if (startDate.isValid()) {
 
                 var endDate = moment(startDate).add(months, 'month').format(dateFormat);
@@ -139,14 +140,16 @@ export default class MemberController {
                                 response: 'An error occured ' + err.sqlMessage
                             });
                         } else {
-
+                          
+                            MemberController.updateMemberEndDate(memberId ,endDate);
 
                             query = 'SELECT * FROM member_subscriptions WHERE id=' + result.insertId;
+                            console.log(query); 
 
                             mysql.getConnection(function (err, connection) {
                                 connection.query(query, function (err, result) {
                                     if (err) {
-
+                                        console.log(err);
                                         res.json({
                                             response: 'An error occured ' + err.sqlMessage
                                         });
@@ -174,13 +177,25 @@ export default class MemberController {
         }
 
     }
+    
+    static updateMemberEndDate(memberId, endDate) {
+       var query = 'UPDATE members SET subEndDate="'+endDate+'" WHERE id= '+memberId+'   ';
+        mysql.getConnection(function (err, connection) {
+            connection.query(query, function (err, result) {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        });
+    }
 
     static membersStats(req, res) {
         var dateFormat = 'YYYY-MM-DD';
         var today = moment().format(dateFormat);
         var totalMembersQuery = 'SELECT COUNT(*) as totalMembers FROM members';
-        var activeMembersQuery = 'SELECT COUNT(DISTINCT(memberId)) as activeMembers FROM member_subscriptions WHERE  endDate >= "' + today + '" ';
-
+        var activeMembersQuery = 'SELECT *'
+        + ' FROM members'
+        + ' WHERE  subEndDate >= "' + today + '"  LIMIT ' + offset + ',' + pageSize;
         var activeMembers = 0;
         var totalMembers = 0;
 
@@ -240,11 +255,53 @@ export default class MemberController {
             var dateFormat = 'YYYY-MM-DD';
             var today = moment().format(dateFormat);
 
-            var query = 'SELECT DISTINCT(memberId) as memberId, lm.*'
-                + ' FROM member_subscriptions'
-                + ' JOIN members AS lm ON memberId = lm.id'
-                + ' WHERE  endDate >= "' + today + '"  LIMIT ' + offset + ',' + pageSize;
+            var query = 'SELECT *'
+                + ' FROM members'
+                + ' WHERE  subEndDate >= "' + today + '"  LIMIT ' + offset + ',' + pageSize;
 
+            mysql.getConnection(function (err, connection) {
+                connection.query(query, function (err, result) {
+                    if (err) {
+                        res.json({
+                            response: 'An error occured ' + err.sqlMessage
+                        });
+                    } else {
+                        res.json({
+                            response: 'success',
+                            data: result
+                        });
+                    }
+
+                });
+            });
+        }
+    }
+
+    static fetchPaginatedInactiveMembers(req, res) {
+
+        let pageNum = req.query.pageNum;
+        let pageSize = req.query.pageSize;
+
+        if (isNaN(pageNum) || isNaN(pageSize)) {
+            res.json({
+                error: 'pageNum and pageSize should be numeric'
+            });
+        } else {
+
+
+            if (pageNum < 1) {
+                pageNum = 1;
+            }
+            if (pageSize < 1) {
+                pageSize = 2;
+            }
+            var offset = (pageNum - 1) * pageSize;
+
+            var dateFormat = 'YYYY-MM-DD';
+            var today = moment().format(dateFormat);
+
+            var query = 'select * from members WHERE subEndDate IS NULL OR subEndDate < "'+today+'"  LIMIT ' + offset + ',' + pageSize;
+            console.log(query);
             mysql.getConnection(function (err, connection) {
                 connection.query(query, function (err, result) {
                     if (err) {
@@ -264,6 +321,7 @@ export default class MemberController {
 
         }
 
+       
     }
 
     static updateMedicals(req, res) {
@@ -369,6 +427,15 @@ export default class MemberController {
     static fetchPaginated(req, res) {
         let pageNum = req.query.pageNum;
         let pageSize = req.query.pageSize;
+        let status = req.query.status;
+        if(status){
+            if(status != 'active' && status != 'inactive'){
+               
+            return   res.json({
+                    response: 'An error occured  status is invalid'
+                });
+            }
+        }
 
         if (isNaN(pageNum) || isNaN(pageSize)) {
             res.json({
@@ -384,8 +451,24 @@ export default class MemberController {
                 pageSize = 2;
             }
             var offset = (pageNum - 1) * pageSize;
+            
+            if(!status){
+                var query = 'SELECT * FROM members LIMIT ' + offset + ',' + pageSize;
+            }else{
+                var dateFormat = 'YYYY-MM-DD';
+                var today = moment().format(dateFormat);
 
-            var query = 'SELECT * FROM members LIMIT ' + offset + ',' + pageSize;
+                if(status=='active'){
+                    var query = 'SELECT *'
+                    + ' FROM members'
+                    + ' WHERE  subEndDate >= "' + today + '"  LIMIT ' + offset + ',' + pageSize;
+                }else{
+                        //inactive
+                      var query = 'select * from members WHERE subEndDate IS NULL OR subEndDate < "'+today+'"  LIMIT ' + offset + ',' + pageSize;
+                }
+            }
+
+          
 
             mysql.getConnection(function (err, connection) {
                 connection.query(query, function (err, result) {
@@ -442,6 +525,10 @@ export default class MemberController {
                 error: 'Username is required'
             });
         }
+    }
+
+    static deleteSubscription(req,res){
+        
     }
 
 }
