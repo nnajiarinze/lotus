@@ -132,7 +132,7 @@ transporter.sendMail(mailOptions, function(error, info){
       connection.query(query, function (err, result) {
 
         if (err) {
-          res.json({
+          return res.json({
             response: 'An error occured.'
           });
         } else {
@@ -146,14 +146,14 @@ transporter.sendMail(mailOptions, function(error, info){
             var passwordHash = md5(password + admin.salt);
             if (passwordHash == admin.passwordHash) {
               console.log("login succes");
-              res.status(200).json({
+             return  res.status(200).json({
                 token: token,
                 success: true,
                 username: admin.username
 
               });
             } else {
-              res.json({
+              return res.json({
                 response: 'failed'
               })
             }
