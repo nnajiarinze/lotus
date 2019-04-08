@@ -193,9 +193,9 @@ export default class MemberController {
         var dateFormat = 'YYYY-MM-DD';
         var today = moment().format(dateFormat);
         var totalMembersQuery = 'SELECT COUNT(*) as totalMembers FROM members';
-        var activeMembersQuery = 'SELECT *'
+        var activeMembersQuery = 'SELECT COUNT(*) as activeMembers'
         + ' FROM members'
-        + ' WHERE  subEndDate >= "' + today + '"  LIMIT ' + offset + ',' + pageSize;
+        + ' WHERE  subEndDate >= "' + today + '" ';
         var activeMembers = 0;
         var totalMembers = 0;
 
@@ -206,6 +206,7 @@ export default class MemberController {
                         response: 'An error occured ' + err.sqlMessage
                     });
                 } else {
+                    console.log(result)
                     activeMembers = result[0].activeMembers;
 
                     mysql.getConnection(function (err, connection) {
@@ -216,6 +217,8 @@ export default class MemberController {
                                 });
                             } else {
                                 totalMembers = result[0].totalMembers;
+                                console.log('total ', totalMembers);
+                                console.log('active ', activeMembers);
                                 res.json({
                                     response: 'success',
                                     active: activeMembers,
