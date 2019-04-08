@@ -126,16 +126,21 @@ transporter.sendMail(mailOptions, function(error, info){
     let { username, password } = req.body;
     var query = 'select * from administrator WHERE username="' + username + '"';
     var admin = {};
-
-
+ 
     mysql.getConnection(function (err, connection, ) {
       connection.query(query, function (err, result) {
-
+       
         if (err) {
           return res.json({
             response: 'An error occured.'
           });
         } else {
+
+         if(result.length< 1){
+            return res.json({
+              response: 'Incorrect username and password'
+            });
+         }
           result.forEach((admin) => {
 
             // create a token
@@ -145,7 +150,7 @@ transporter.sendMail(mailOptions, function(error, info){
 
             var passwordHash = md5(password + admin.salt);
             if (passwordHash == admin.passwordHash) {
-              console.log("login succes");
+            
              return  res.status(200).json({
                 token: token,
                 success: true,
